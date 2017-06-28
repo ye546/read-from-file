@@ -115,52 +115,56 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 		
 		if (message == WM_COMMAND && (HWND)lParam == createFile)
 		{
-			std::basic_fstream<char> file;
-			
 			GetWindowTextA(nameOfFile2, (LPSTR)fileName2, _countof(fileName2));
 			GetWindowTextA(textWindow, (LPSTR)text, _countof(text));
 			
+			std::fstream file(fileName2, std::fstream::app);
 			
-			file.open(fileName2, std::fstream::app);
-			for (int i = 0; i < strlen(text); i++)
+			if (!file.is_open())
 			{
-				file << text[i];
+				MessageBoxA(NULL, "Couldn't open the specified file.", "Error", MB_ICONERROR);
+			}
+			else
+			{
+				for (int i = 0; i < strlen(text); i++)
+				{
+					file << text[i];
+				}
+
+				file.close();
 			}
 
-			file.close();
 		}
 		
-		/*  needs fixing
-
-
 		if (message == WM_COMMAND && (HWND)lParam == open)
 		{
-			//std::basic_ifstream<char> file;
-			
-			std::basic_ifstream<TCHAR> file;
-			std::string line;
-			int loop = 0;
-
 			GetWindowTextA(nameOfFile, (LPSTR)fileName, _countof(fileName));
 			GetWindowTextA(textWindow, (LPSTR)text, _countof(text));
-			
-			file.open(fileName);
 
-			for (int i = 0; i < 1000; i++)
+			std::ifstream file(fileName);
+			if (!file.is_open())
 			{
-				text[i] = 0;
+				MessageBoxA(NULL, "Couldn't open the specified file.", "Error", MB_ICONERROR);
 			}
-
-			while (std::getline(fileName, line))
+			else
 			{
-				
-				loop++;
-			}
-	
-			SetWindowTextA(textWindow, (LPSTR)text);
+				for (int i = 0; i < 1000; i++)
+				{
+					text[i] = 0;
+				}
 
-			file.close();
-		}*/
+				std::string line;
+				int i = 0;
+
+				while (std::getline(file, line))
+				{
+					strcpy(text, line.c_str());
+				}
+
+				SetWindowTextA(textWindow, (LPSTR)text);
+				file.close();
+			}
+		}
 		
 		if (message == WM_COMMAND && (HWND)lParam == clearWindow)
 		{
