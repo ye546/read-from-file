@@ -56,7 +56,7 @@ int WINAPI WinMain(HINSTANCE hThisInstance,
 		0,                   /* Extended possibilites for variation */
 		szClassName,         /* Classname */
 		_T("New Application 2017-06-28"),       /* Title Text */
-		WS_OVERLAPPEDWINDOW, /* default window */
+		WS_OVERLAPPED | WS_SYSMENU, /* default window */
 		CW_USEDEFAULT,       /* Windows decides the position */
 		CW_USEDEFAULT,       /* where the window ends up on the screen */
 		544,                 /* The programs width */
@@ -88,7 +88,7 @@ int WINAPI WinMain(HINSTANCE hThisInstance,
 
 LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	char text[1000];
+	char text[10000];
 	char fileName[100];
 	char fileName2[100];
 
@@ -110,7 +110,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 	case WM_COMMAND:
 		if (message == WM_COMMAND && (HWND)lParam == submitButton)
 		{
-			MessageBoxA(NULL, "xd", "xd", MB_OK | MB_ICONINFORMATION);
+			MessageBoxA(NULL, "Your file has successfully been submitted!", "Information", MB_OK | MB_ICONINFORMATION);
 		}
 		
 		if (message == WM_COMMAND && (HWND)lParam == createFile)
@@ -120,7 +120,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			
 			std::fstream file(fileName2, std::fstream::app);
 			
-			if (!file.is_open())
+			if (!file.is_open())/* if the file can't be accessed or doesn't exist */
 			{
 				MessageBoxA(NULL, "Couldn't open the specified file.", "Error", MB_ICONERROR);
 			}
@@ -148,7 +148,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			}
 			else
 			{
-				for (int i = 0; i < 1000; i++)
+				for (int i = 0; i < 10000; i++)
 				{
 					text[i] = 0;
 				}
@@ -158,7 +158,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
 				while (std::getline(file, line))
 				{
-					strcpy(text, line.c_str());
+					strcpy(text, line.c_str()); /* Doesn't work with \n. This needs fixing. */
 				}
 
 				SetWindowTextA(textWindow, (LPSTR)text);
