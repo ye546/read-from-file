@@ -4,7 +4,6 @@
 #define UNICODE
 #endif
 
-#include <tchar.h>
 #include <windows.h>
 #include <fstream>
 #include <string.h>
@@ -142,6 +141,8 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			GetWindowTextA(textWindow, (LPSTR)text, _countof(text));
 
 			std::ifstream file(fileName);
+			std::string line;
+			
 			if (!file.is_open())
 			{
 				MessageBoxA(NULL, "Couldn't open the specified file.", "Error", MB_ICONERROR);
@@ -152,9 +153,6 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 				{
 					text[i] = 0;
 				}
-
-				std::string line;
-				int i = 0;
 
 				while (std::getline(file, line))
 				{
